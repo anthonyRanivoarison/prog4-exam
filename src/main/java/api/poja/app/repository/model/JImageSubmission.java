@@ -1,6 +1,7 @@
 package api.poja.app.repository.model;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +23,7 @@ public class JImageSubmission {
 
   @Column(name = "email", nullable = false)
   private String email;
+
+  @Column(name = "created_at", nullable = false)
+  private Instant createdAt;
 }
