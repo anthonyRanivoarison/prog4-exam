@@ -2,7 +2,7 @@ package api.poja.app.service;
 
 import api.poja.app.endpoint.event.EventProducer;
 import api.poja.app.endpoint.event.model.ImageProcessingRequested;
-import api.poja.app.file.bucket.BucketComponent;
+import api.poja.app.file.bucket.BucketConf;
 import api.poja.app.file.zip.FileTyper;
 import api.poja.app.mapper.ImageSubmissionMapper;
 import api.poja.app.model.ImageSubmission;
@@ -17,13 +17,15 @@ import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @Service
 @RequiredArgsConstructor
 public class ImageSubmissionService {
   private final ImageSubmissionRepository repository;
   private final ImageSubmissionMapper mapper;
-  private final BucketComponent bucketComponent;
+  private final BucketConf bucketConf;
   private final EventProducer<ImageProcessingRequested> eventProducer;
   private final FileTyper fileTyper;
 
@@ -45,7 +47,11 @@ public class ImageSubmissionService {
     JImageSubmission saved = repository.save(entity);
 
     String s3Key = "original/" + saved.getId() + "/" + saved.getFilename();
-    bucketComponent.upload(tempFile, s3Key);
+    bucketConf
+        .getS3Client()
+        .putObject(
+            PutObjectRequest.builder().bucket(bucketConf.getBucketName()).key(s3Key).build(),
+            RequestBody.fromFile(tempFile));
 
     var event =
         ImageProcessingRequested.builder()
