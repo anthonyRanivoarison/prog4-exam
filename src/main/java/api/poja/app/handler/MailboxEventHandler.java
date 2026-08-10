@@ -5,7 +5,6 @@ import static java.lang.Runtime.getRuntime;
 import static java.lang.System.getenv;
 import static java.lang.Thread.currentThread;
 
-import api.poja.app.PojaApplication;
 import api.poja.app.PojaGenerated;
 import api.poja.app.endpoint.EndpointConf;
 import api.poja.app.endpoint.event.EventConf;
@@ -73,7 +72,7 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
   }
 
   private ConfigurableApplicationContext applicationContext(String... args) {
-    SpringApplication application = new SpringApplication(PojaApplication.class);
+    SpringApplication application = new SpringApplication(api.poja.app.PojaApplication.class);
     application.setDefaultProperties(
         Map.of(
             "spring.flyway.enabled", "false", "server.port", SPRING_SERVER_PORT_FOR_RANDOM_VALUE));
