@@ -1,6 +1,5 @@
 package api.poja.app.handler;
 
-import api.poja.app.PojaApplication;
 import api.poja.app.PojaGenerated;
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
@@ -19,7 +18,9 @@ public class LambdaHandler implements RequestStreamHandler {
 
   static {
     try {
-      handler = SpringBootLambdaContainerHandler.getHttpApiV2ProxyHandler(PojaApplication.class);
+      handler =
+          SpringBootLambdaContainerHandler.getHttpApiV2ProxyHandler(
+              api.poja.app.PojaApplication.class);
     } catch (ContainerInitializationException e) {
       throw new RuntimeException("Initialization of Spring Boot Application failed", e);
     }
