@@ -23,7 +23,7 @@ public class ImageProcessingRequested extends PojaEvent {
 
   @Override
   public Duration maxConsumerDuration() {
-    return Duration.ofSeconds(60);
+    return Duration.ofSeconds(45);
   }
 
   @Override
